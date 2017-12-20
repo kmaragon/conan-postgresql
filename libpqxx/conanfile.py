@@ -20,7 +20,7 @@ class LibpqxxConan(ConanFile):
         os.unlink("libpqxx.tar.gz")
 
     def build(self):
-        flags = ""
+        flags = "--disable-documentation"
         if self.options.shared:
             flags += " --enable-shared --disable-static"
         else:
@@ -32,10 +32,10 @@ class LibpqxxConan(ConanFile):
             make_options += " -j %s" % cpucount
         
         # configure
-        self.run("source activate_build.* && source activate_run.* && cd libpqxx-%s && ./configure --prefix=%s %s" % (self.version, self.package_folder, flags))
+        self.run(". ./activate_build.* && . ./activate_run.* && cd libpqxx-%s && ./configure --prefix=%s %s" % (self.version, self.package_folder, flags))
 
         # build
-        self.run("source activate_build.* && cd libpqxx-%s && make %s" % (self.version, make_options))
+        self.run(". ./activate_build.* && . ./activate_run.* && cd libpqxx-%s && make %s" % (self.version, make_options))
 
     def package(self):
         self.run("cd libpqxx-%s && make install" % self.version)

@@ -35,7 +35,7 @@ class PostgresqlConan(ConanFile):
         os.unlink("postgresql.tar.bz2")
 
     def build(self):
-        flags="--template=linux"
+        flags="--without-readline"
         if self.options.disable_thread_safe:
             flags += " --disable-thread-safety"
         if self.options.disable_largefile:
@@ -55,10 +55,10 @@ class PostgresqlConan(ConanFile):
         # configure
         cdir = os.getcwd()
         image_location = os.path.join(cdir, "buildimg")
-        self.run("source activate_build.* && cd postgresql-%s && ./configure --prefix=%s %s" % (self.version, image_location, flags))
+        self.run(". ./activate_build.* && cd postgresql-%s && ./configure --prefix=%s %s" % (self.version, image_location, flags))
 
         # build
-        self.run("source activate_build.* && cd postgresql-%s && make %s" % (self.version, make_options))
+        self.run(". ./activate_build.* && cd postgresql-%s && make %s" % (self.version, make_options))
 
     def package(self):
         self.run("cd postgresql-%s && make install" % self.version)
@@ -81,6 +81,8 @@ class PostgresqlConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = ["pq"]
+        if self.settings.os == "Linux":
+            self.cpp_info.libs.append("pthread")
         self.cpp_info.libdirs = ["lib"]
         self.cpp_info.includedirs = ["include"]
         self.cpp_info.bindirs = ["bin"]
