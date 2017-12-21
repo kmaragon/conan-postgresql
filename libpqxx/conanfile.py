@@ -13,11 +13,15 @@ class LibpqxxConan(ConanFile):
     default_options = "shared=False"
     generators = "virtualbuildenv", "virtualrunenv"
     requires = "postgresql/10.1@kmaragon/stable"
+    exports = "sed_command_fix.patch"
 
     def source(self):
         tools.download("https://github.com/jtv/libpqxx/archive/%s.tar.gz" % self.version, "libpqxx.tar.gz")
         tools.unzip("libpqxx.tar.gz")
         os.unlink("libpqxx.tar.gz")
+
+        self.run("patch -p0 < sed_command_fix.patch")
+        self.run("cd libpqxx-%s/ && autoconf" % self.version)
 
     def build(self):
         flags = "--disable-documentation"
