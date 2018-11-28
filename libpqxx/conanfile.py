@@ -4,7 +4,7 @@ import re
 
 class LibpqxxConan(ConanFile):
     name = "libpqxx"
-    version = "5.0.1"
+    version = "6.2.5"
     license = "BSD"
     url = "https://github.com/kmaragon/conan-postgresql"
     description = "Conan packages for pqxx"
@@ -12,15 +12,15 @@ class LibpqxxConan(ConanFile):
     options = {"shared": [True, False]}
     default_options = "shared=False"
     generators = "virtualbuildenv", "virtualrunenv"
-    requires = "postgresql/10.1@kmaragon/stable"
-    exports = "sed_command_fix.patch"
+    requires = "postgresql/11.1@kmaragon/stable"
+    #exports = "sed_command_fix.patch"
 
     def source(self):
         tools.download("https://github.com/jtv/libpqxx/archive/%s.tar.gz" % self.version, "libpqxx.tar.gz")
         tools.unzip("libpqxx.tar.gz")
         os.unlink("libpqxx.tar.gz")
 
-        self.run("patch -p0 < sed_command_fix.patch")
+        #self.run("patch -p0 < sed_command_fix.patch")
         self.run("cd libpqxx-%s/ && autoconf" % self.version)
 
     def build(self):

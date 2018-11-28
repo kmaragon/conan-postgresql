@@ -4,7 +4,7 @@ import re
 
 class PostgresqlConan(ConanFile):
     name = "postgresql"
-    version = "10.1"
+    version = "11.1"
     license = "BSD"
     url = "https://github.com/kmaragon/conan-postgresql"
     description = "Conan packages for postgresql"
@@ -24,12 +24,12 @@ class PostgresqlConan(ConanFile):
         if self.options.icu:
             self.requires("icu:60.1@sigmoidal/60.1")
         if self.options.openssl:
-            self.requires("OpenSSL/1.0.2m@conan/stable")
+            self.requires("OpenSSL/1.0.2o@conan/stable")
         if not self.options.disable_zlib:
             self.requires("zlib/1.2.11@conan/stable")
 
     def source(self):
-        tools.download("https://ftp.postgresql.org/pub/source/v10.1/postgresql-%s.tar.bz2" % self.version,
+        tools.download("https://ftp.postgresql.org/pub/source/v{0}/postgresql-{0}.tar.bz2".format(self.version),
             "postgresql.tar.bz2")
         tools.unzip("postgresql.tar.bz2")
         os.unlink("postgresql.tar.bz2")
