@@ -24,7 +24,7 @@ class PostgresqlConan(ConanFile):
         if self.options.icu:
             self.requires("icu:60.1@sigmoidal/60.1")
         if self.options.openssl:
-            self.requires("OpenSSL/1.0.2o@conan/stable")
+            self.requires("OpenSSL/1.0.2q@conan/stable")
         if not self.options.disable_zlib:
             self.requires("zlib/1.2.11@conan/stable")
 
