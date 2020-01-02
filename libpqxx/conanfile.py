@@ -1,5 +1,6 @@
 from conans import ConanFile, tools
 import os
+import sys
 import re
 
 class LibpqxxConan(ConanFile):
@@ -19,6 +20,9 @@ class LibpqxxConan(ConanFile):
         tools.download("https://github.com/jtv/libpqxx/archive/%s.tar.gz" % self.version, "libpqxx.tar.gz")
         tools.unzip("libpqxx.tar.gz")
         os.unlink("libpqxx.tar.gz")
+
+        tools.replace_in_file('libpqxx-{}/tools/template2mak.py'.format(self.version), '#! /usr/bin/env python', '#! /usr/bin/env {}'.format(sys.executable))
+        tools.replace_in_file('libpqxx-{}/tools/splitconfig'.format(self.version), '#! /usr/bin/env python', '#! /usr/bin/env {}'.format(sys.executable))
 
         #self.run("patch -p0 < sed_command_fix.patch")
         self.run("cd libpqxx-%s/ && autoconf" % self.version)
