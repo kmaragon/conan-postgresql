@@ -4,7 +4,7 @@ import re
 
 class LibpqxxConan(ConanFile):
     name = "libpqxx"
-    version = "6.2.5"
+    version = "6.4.5"
     license = "BSD"
     url = "https://github.com/kmaragon/conan-postgresql"
     description = "Conan packages for pqxx"
@@ -12,7 +12,7 @@ class LibpqxxConan(ConanFile):
     options = {"shared": [True, False]}
     default_options = "shared=False"
     generators = "virtualbuildenv", "virtualrunenv"
-    requires = "postgresql/11.1@kmaragon/stable"
+    requires = "postgresql/12.0@kmaragon/stable"
     #exports = "sed_command_fix.patch"
 
     def source(self):
@@ -36,10 +36,10 @@ class LibpqxxConan(ConanFile):
             make_options += " -j %s" % cpucount
         
         # configure
-        self.run(". ./activate_build.* && . ./activate_run.* && cd libpqxx-%s && ./configure --prefix=%s %s" % (self.version, self.package_folder, flags))
+        self.run(". ./activate_build.* && cd libpqxx-%s && ./configure --prefix=%s %s" % (self.version, self.package_folder, flags), run_environment=True)
 
         # build
-        self.run(". ./activate_build.* && . ./activate_run.* && cd libpqxx-%s && make %s" % (self.version, make_options))
+        self.run(". ./activate_build.* && cd libpqxx-%s && make %s" % (self.version, make_options), run_environment=True)
 
     def package(self):
         self.run("cd libpqxx-%s && make install" % self.version)
