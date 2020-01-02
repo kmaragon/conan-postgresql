@@ -58,7 +58,7 @@ class PostgresqlConan(ConanFile):
         self.run(". ./activate_build.* && cd postgresql-%s && ./configure --prefix=%s %s" % (self.version, image_location, flags))
 
         # build
-        self.run(". ./activate_build.* && cd postgresql-%s && make %s" % (self.version, make_options))
+        self.run(". ./activate_build.* && cd postgresql-%s && make %s MAKELEVEL=0" % (self.version, make_options))
 
     def package(self):
         self.run("cd postgresql-%s && make install" % self.version)
